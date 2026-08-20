@@ -11,12 +11,16 @@ abstract class EmpresaRemoteDatasource {
 }
 
 class EmpresaRemoteDatasourceImpl implements EmpresaRemoteDatasource {
+  final http.Client _client;
+
+  EmpresaRemoteDatasourceImpl(this._client);
+
   @override
   Future<Empresa> getEmpresa({required String cnpj}) async {
     final url = Uri.parse('${ApiConstants.baseUrl}$cnpj');
 
     try {
-      final response = await http.get(url);
+      final response = await _client.get(url);
 
       switch (response.statusCode) {
         case 200:
