@@ -3,6 +3,7 @@ import 'package:consulta_cnpj/domain/entities/empresa.dart';
 import 'package:consulta_cnpj/presentation/providers/empresa_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class EmpresaView extends ConsumerStatefulWidget {
@@ -187,7 +188,7 @@ class _EmpresaCardDetails extends StatelessWidget {
                 '(${empresa.ddd ?? ''}) ${empresa.telefone}',
               ),
             if (empresa.email != null) _infoRow('E-mail', empresa.email!),
-            if (empresa.capitalSocial != null) _infoRow('Capital Social', 'R\$ ${empresa.capitalSocial}'),
+            if (empresa.capitalSocial != null) _infoRow('Capital Social', formatarMoeda(empresa.capitalSocial)),
             if (empresa.inscricoesEstaduais != null && empresa.inscricoesEstaduais!.isNotEmpty) ...[
               const SizedBox(height: 8),
               const Text(
@@ -226,5 +227,18 @@ class _EmpresaCardDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatarMoeda(String? valor) {
+    if (valor == null || valor.isEmpty) return 'R\$ 0,00';
+
+    final numero = double.tryParse(valor) ?? 0.0;
+    final formatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: 'R\$',
+      decimalDigits: 2,
+    );
+
+    return formatter.format(numero);
   }
 }
