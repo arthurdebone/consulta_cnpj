@@ -13,7 +13,7 @@ part of 'empresa_notifier.dart';
 const empresaProvider = EmpresaNotifierProvider._();
 
 final class EmpresaNotifierProvider
-    extends $AsyncNotifierProvider<EmpresaNotifier, void> {
+    extends $AsyncNotifierProvider<EmpresaNotifier, Empresa?> {
   const EmpresaNotifierProvider._()
       : super(
           from: null,
@@ -33,20 +33,20 @@ final class EmpresaNotifierProvider
   EmpresaNotifier create() => EmpresaNotifier();
 }
 
-String _$empresaNotifierHash() => r'e9624f005008e50e32191e3798671c7d62b065b7';
+String _$empresaNotifierHash() => r'e7d1f0cb29a48365369d2862b3aa37c05811367c';
 
-abstract class _$EmpresaNotifier extends $AsyncNotifier<void> {
-  FutureOr<void> build();
+abstract class _$EmpresaNotifier extends $AsyncNotifier<Empresa?> {
+  FutureOr<Empresa?> build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<Empresa?>, Empresa?>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AsyncValue<void>, void>,
-        AsyncValue<void>,
+        AnyNotifier<AsyncValue<Empresa?>, Empresa?>,
+        AsyncValue<Empresa?>,
         Object?,
         Object?>;
-    element.handleValue(ref, null);
+    element.handleValue(ref, created);
   }
 }
