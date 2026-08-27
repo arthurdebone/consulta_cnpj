@@ -33,7 +33,7 @@ final class EmpresaNotifierProvider
   EmpresaNotifier create() => EmpresaNotifier();
 }
 
-String _$empresaNotifierHash() => r'e7d1f0cb29a48365369d2862b3aa37c05811367c';
+String _$empresaNotifierHash() => r'2406d57cf88e6e4e1cb31402935d7110fbb00b43';
 
 abstract class _$EmpresaNotifier extends $AsyncNotifier<Empresa?> {
   FutureOr<Empresa?> build();

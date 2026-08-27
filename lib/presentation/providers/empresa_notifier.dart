@@ -23,9 +23,16 @@ class EmpresaNotifier extends _$EmpresaNotifier {
     final repository = ref.read(empresaRepositoryProvider);
     final result = await repository.getEmpresa(cnpj: cnpj);
 
-    state = switch (result) {
-      Ok(value: final empresa) => AsyncValue<Empresa?>.data(empresa),
-      Err(error: final failure) => AsyncValue<Empresa?>.error(failure, StackTrace.current),
-    };
+    switch (result) {
+      case Ok(value: final empresa):
+        final prefs = ref.read(sharedPreferencesProvider);
+        final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^A-Z0-9]'), '').toUpperCase();
+        await prefs.setString('cnpj', cnpjLimpo);
+
+        state = AsyncValue<Empresa?>.data(empresa);
+
+      case Err(error: final failure):
+        state = AsyncValue<Empresa?>.error(failure, StackTrace.current);
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:consulta_cnpj/data/repositories/empresa_repository_impl.dart';
 import 'package:consulta_cnpj/domain/repositories/empresa_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'empresa_provider.g.dart';
 
@@ -19,4 +20,9 @@ EmpresaRemoteDatasource empresaRemoteDatasource(Ref ref) {
 @Riverpod(keepAlive: true)
 EmpresaRepository empresaRepository(Ref ref) {
   return EmpresaRepositoryImpl(ref.watch(empresaRemoteDatasourceProvider));
+}
+
+@Riverpod(keepAlive: true)
+SharedPreferences sharedPreferences(Ref ref) {
+  throw UnimplementedError();
 }

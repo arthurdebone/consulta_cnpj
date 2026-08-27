@@ -136,3 +136,46 @@ final class EmpresaRepositoryProvider extends $FunctionalProvider<
 }
 
 String _$empresaRepositoryHash() => r'f53008625fd6fcbb59e9ea7a256cf234371e08a1';
+
+@ProviderFor(sharedPreferences)
+const sharedPreferencesProvider = SharedPreferencesProvider._();
+
+final class SharedPreferencesProvider extends $FunctionalProvider<
+    SharedPreferences,
+    SharedPreferences,
+    SharedPreferences> with $Provider<SharedPreferences> {
+  const SharedPreferencesProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'sharedPreferencesProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$sharedPreferencesHash();
+
+  @$internal
+  @override
+  $ProviderElement<SharedPreferences> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SharedPreferences create(Ref ref) {
+    return sharedPreferences(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SharedPreferences value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SharedPreferences>(value),
+    );
+  }
+}
+
+String _$sharedPreferencesHash() => r'1a6250efdc19e86c923ceb598a77ff74d64378e6';

@@ -1,11 +1,21 @@
 import 'package:consulta_cnpj/presentation/pages/empresa_view.dart';
+import 'package:consulta_cnpj/presentation/providers/empresa_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
     // O ProviderScope armazena todo o estado dos providers do Riverpod
-    const ProviderScope(
+    ProviderScope(
+      overrides: [
+        // O gerador cria automaticamente a constante "sharedPreferencesProvider"
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
       child: MyApp(),
     ),
   );

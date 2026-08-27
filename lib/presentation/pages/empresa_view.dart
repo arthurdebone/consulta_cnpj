@@ -3,6 +3,7 @@ import 'package:consulta_cnpj/core/utils/mascaras.dart';
 import 'package:consulta_cnpj/core/utils/validacao_cnpj.dart';
 import 'package:consulta_cnpj/domain/entities/empresa.dart';
 import 'package:consulta_cnpj/presentation/providers/empresa_notifier.dart';
+import 'package:consulta_cnpj/presentation/providers/empresa_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,8 +18,8 @@ class EmpresaView extends ConsumerStatefulWidget {
 
 class _EmpresaViewState extends ConsumerState<EmpresaView> {
   final _formKey = GlobalKey<FormState>();
-  final _cnpjController = TextEditingController();
   final _validator = ValidacaoCnpj();
+  late final TextEditingController _cnpjController;
 
   final _cnpjMaskFormatter = MaskTextInputFormatter(
     mask: 'AA.AAA.AAA/AAAA-00',
@@ -28,6 +29,19 @@ class _EmpresaViewState extends ConsumerState<EmpresaView> {
     },
     type: MaskAutoCompletionType.lazy,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _cnpjController = TextEditingController();
+
+    final prefs = ref.read(sharedPreferencesProvider);
+    final ultimoCnpj = prefs.getString('cnpj');
+
+    if (ultimoCnpj != null && ultimoCnpj.isNotEmpty) {
+      _cnpjController.text = ultimoCnpj;
+    }
+  }
 
   @override
   void dispose() {
