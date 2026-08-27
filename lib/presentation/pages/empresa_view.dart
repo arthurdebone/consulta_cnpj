@@ -1,4 +1,6 @@
 import 'package:consulta_cnpj/core/errors/failures.dart';
+import 'package:consulta_cnpj/core/utils/mascaras.dart';
+import 'package:consulta_cnpj/core/utils/validacao_cnpj.dart';
 import 'package:consulta_cnpj/domain/entities/empresa.dart';
 import 'package:consulta_cnpj/presentation/providers/empresa_notifier.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,14 @@ class EmpresaView extends ConsumerStatefulWidget {
 class _EmpresaViewState extends ConsumerState<EmpresaView> {
   final _formKey = GlobalKey<FormState>();
   final _cnpjController = TextEditingController();
+  final _validator = ValidacaoCnpj();
 
   final _cnpjMaskFormatter = MaskTextInputFormatter(
-    mask: '##.###.###/####-##',
-    filter: {"#": RegExp(r'[0-9]')},
+    mask: 'AA.AAA.AAA/AAAA-00',
+    filter: {
+      "A": RegExp(r'[a-zA-Z0-9]'),
+      "0": RegExp(r'[0-9]'),
+    },
     type: MaskAutoCompletionType.lazy,
   );
 
@@ -57,23 +63,24 @@ class _EmpresaViewState extends ConsumerState<EmpresaView> {
                   TextFormField(
                     controller: _cnpjController,
                     inputFormatters: [_cnpjMaskFormatter],
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.characters,
                     decoration: InputDecoration(
                       labelText: 'CNPJ',
-                      hintText: '00.000.000/0000-00',
+                      hintText: 'A1.B2C.3D4/E5F6-00',
                       border: const OutlineInputBorder(),
+                      helperText: 'O novo formato de CNPJ aceita letras e números.',
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: _consultar,
                       ),
                     ),
                     validator: (value) {
-                      final unmasked = _cnpjMaskFormatter.getUnmaskedText();
-                      if (unmasked.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Informe o CNPJ';
                       }
-                      if (unmasked.length < 14) {
-                        return 'CNPJ incompleto';
+                      if (!_validator.validacaoCnpj(value)) {
+                        return 'CNPJ inválido. Verifique os dados.';
                       }
                       return null;
                     },
@@ -222,7 +229,7 @@ class _EmpresaCardDetails extends StatelessWidget {
               text: '$label: ',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextSpan(text: value),
+            TextSpan(text: Mascaras.mascaraCnpj(value)),
           ],
         ),
       ),
