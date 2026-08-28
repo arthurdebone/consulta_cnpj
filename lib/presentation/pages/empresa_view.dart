@@ -39,7 +39,7 @@ class _EmpresaViewState extends ConsumerState<EmpresaView> {
     final ultimoCnpj = prefs.getString('cnpj');
 
     if (ultimoCnpj != null && ultimoCnpj.isNotEmpty) {
-      _cnpjController.text = Mascaras.mascaraCnpj(ultimoCnpj);
+      _cnpjController.text = _cnpjMaskFormatter.maskText(ultimoCnpj);
     }
   }
 
